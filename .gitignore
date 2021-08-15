@@ -1,0 +1,6 @@
+.qmake.stash
+./linux-bin
+./build
+./Makefile
+
+
