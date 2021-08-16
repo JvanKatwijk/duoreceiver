@@ -70,7 +70,6 @@ dabService      currentService;
 	                                    audioHandler (&audioSamples),
 	                                    audioFilter (11, 15000 / 2, 48000) {
 int16_t	latency		= 1;
-int16_t	k;
 QString h;
 QString	presetName;
 	duoSettings	= Si;
@@ -118,6 +117,7 @@ QString	presetName;
 	         SLOT (updateTimeDisplay ()));
 	displayTimer. start (1000);
 
+	switchTime	= 6000;
 	connect (fmSelector, SIGNAL (clicked ()),
 	         this, SLOT (set_fmSystem ()));
 	connect (dabSelector, SIGNAL (clicked ()),
@@ -132,7 +132,7 @@ QString	presetName;
 	presetTimer. setSingleShot (true);
         presetTimer. setInterval (switchTime);
         connect (&presetTimer, SIGNAL (timeout (void)),
-                    this, SLOT (setPresetStation (void)));
+                 this, SLOT (setPresetStation (void)));
 //
 //
 	globals. dabMode	= 1;
@@ -153,6 +153,7 @@ QString	presetName;
                  this, SLOT (handle_nextChannelButton (void)));
         connect (prevChannelButton, SIGNAL (clicked (void)),
                  this, SLOT (handle_prevChannelButton (void)));
+	nextService. valid	= false;
 
 //
 //	connects for the FM subsystem
@@ -222,19 +223,14 @@ QString h;
 
 	stackedWidget	-> setCurrentIndex (0);
 	currentService. valid   = false;
-        nextService. valid      = false;
 	duoSettings	-> beginGroup ("DAB_SYSTEM");
-	bool has_presetName     =
-	        duoSettings -> value ("has-presetName", 1). toInt() != 0;
-	if (has_presetName) {
-	   QString presetName           =
-	               duoSettings -> value ("presetname", ""). toString();
-	   if (presetName != "") {
-	      nextService. serviceName = presetName;
-	      nextService. SId          = 0;
-	      nextService. SCIds        = 0;
-	      nextService. valid        = true;
-	   }
+	QString presetName           =
+	               duoSettings -> value ("presetName", ""). toString();
+	if (presetName != "") {
+	   nextService. serviceName = presetName;
+	   nextService. SId          = 0;
+	   nextService. SCIds        = 0;
+	   nextService. valid        = true;
 	}
 
 	h       = duoSettings -> value ("channel", "12C"). toString();
@@ -265,9 +261,13 @@ void	duoReceiver::stop_dabSystem	() {
 	presetTimer. stop ();
 	duoSettings	-> beginGroup ("DAB_SYSTEM");
 	duoSettings	-> setValue ("channel", channelSelector -> currentText ());
-	if (currentService. valid) 
+	if (currentService. valid) {
 	   duoSettings -> setValue ("presetName", currentService. serviceName);
+	}
 	duoSettings	-> endGroup ();
+	stopChannel ();
+        disconnect (channelSelector, SIGNAL (activated (const QString &)),
+                    this, SLOT (selectChannel (const QString &)));
 	my_presetHandler. savePresets (presetSelector);
 }
 
@@ -349,7 +349,8 @@ void	duoReceiver::TerminateProcess	() {
 void	duoReceiver::dabAudio     (int amount, int rate) {
         if (running. load ()) {
            int16_t vec [amount];
-           while (dab_audioBuffer. GetRingBufferReadAvailable() > amount) {
+           while (dab_audioBuffer. GetRingBufferReadAvailable() >
+	                        (uint32_t)amount) {
               dab_audioBuffer. getDataFromBuffer (vec, amount);
               audioHandler. audioOut (vec, amount, rate);
            }
@@ -554,7 +555,6 @@ void	duoReceiver::stopService	() {
 	presetTimer. stop ();
 	presetSelector -> setCurrentIndex (0);
 	if (currentService. valid) {
-	   fprintf (stderr, "stopping service\n");
 	   audiodata ad;
 	   my_dabProcessor -> dataforAudioService (currentService. serviceName,
 	                                                  &ad);
@@ -748,7 +748,6 @@ void	duoReceiver::setPresetStation () {
 	QString presetName	= nextService. serviceName;
 	for (const auto& service: serviceList) {
 	   if (service. name. contains (presetName)) {
-	      fprintf (stderr, "going to select %s\n", presetName. toUtf8 (). data ());
 	      dabService s;
 	      s. serviceName = presetName;
 	      my_dabProcessor	-> getParameters (presetName, &s. SId, &s. SCIds);
@@ -772,8 +771,6 @@ void	duoReceiver::setPresetStation () {
 void	duoReceiver::startChannel (const QString &channel) {
 int	tunedFrequency	=
 	         theBand. Frequency (channel);
-	fprintf (stderr, "starting %d, channel %s\n",
-	                        tunedFrequency, channel. toLatin1 (). data ());
 	theDevice		-> restartReader (tunedFrequency);
 	my_dabProcessor		-> start (tunedFrequency);
 	show_for_safety	();
@@ -785,7 +782,11 @@ void	duoReceiver::stopChannel	() {
 	ficSuccess		= 0;
 	ficBlocks		= 0;
 	presetTimer. stop ();
+        disconnect (presetSelector, SIGNAL (activated (const QString &)),
+                 this, SLOT (handle_presetSelector (const QString &)));
 	presetSelector		-> setCurrentIndex (0);
+        connect (presetSelector, SIGNAL (activated (const QString &)),
+                 this, SLOT (handle_presetSelector (const QString &)));
 	hide_for_safety		();
 //
 //	The service(s) - if any - is stopped by halting the dabProcessor
@@ -949,12 +950,10 @@ void    duoReceiver::handle_freqButton (void) {
 //
 //	This function os for FM only, so we check the frequency range
 void	duoReceiver::newFrequency	(int freq) {
-	fprintf (stderr, "request for freq %d *%d %d)\n", freq, fmLow, fmHigh);
 	if (freq < KHz (fmLow))
 	   return;
 	if (freq > KHz (fmHigh))
 	   return;
-	fprintf (stderr, "en nu echt\n");
 	theDevice	-> setVFOFrequency (freq);
 	lcd_Frequency	-> display (freq / 1000);
 }
@@ -977,7 +976,6 @@ void    duoReceiver::showLocked (bool locked) {
 }
 
 void	duoReceiver::clearStationLabel () {
-	fprintf (stderr, "clearing stationLabel\n");
 	stationLabelTextBox	-> setText ("");
 }
 //
@@ -993,12 +991,10 @@ void	duoReceiver::setMusicSpeechFlag (int n) {
 }
 
 void	duoReceiver::clearMusicSpeechFlag (void) {
-	fprintf (stderr, "clearinf speech/music flag\n");
 	speechLabel	-> setText (QString (""));
 }
 
 void	duoReceiver::clearRadioText () {
-	fprintf (stderr, "clearing radiotext\n");
 	radioTextBox	-> setText (QString (""));
 }
 //

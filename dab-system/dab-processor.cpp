@@ -40,11 +40,11 @@
 	dabProcessor::dabProcessor	(duoReceiver	*mr,
 	                                 deviceHandler *theDevice,
 	                                 processParams	*p):
-	                                    params (p -> dabMode),
+	                                    params (DAB_MODE_1),
 	                                    myReader (mr, theDevice),
-	                                    my_ficHandler (mr, p -> dabMode),
-	                                    my_mscHandler (mr, p -> dabMode),
-	                                    phaseSynchronizer (mr, p),
+	                                    my_ficHandler (mr),
+	                                    my_mscHandler (mr),
+	                                    phaseSynchronizer (mr),
 	                                    my_ofdmDecoder (mr) {
 
 	this	-> frequency		= 220000000;	// default

@@ -60,14 +60,15 @@ int32_t	i;
 }
 
 void	fftFilter::setSimple (int32_t low, int32_t high, int32_t rate) {
-int32_t i;
 BasicBandPass	*BandPass	= new BasicBandPass ((int16_t)filterDegree,
 	                                             low, high, rate);
 
-	for (i = 0; i < filterDegree; i ++)
+	for (int i = 0; i < filterDegree; i ++)
 	   filterVector [i] = (BandPass -> getKernel ()) [i];
-	memset (&filterVector [filterDegree], 0,
-	                (fftSize - filterDegree) * sizeof (std::complex<float>));
+	for (int i = filterDegree; i < fftSize; i ++)
+	   filterVector [i] = std::complex<float> (0, 0);
+//	memset (&filterVector [filterDegree], 0,
+//	                (fftSize - filterDegree) * sizeof (std::complex<float>));
 	FilterFFT	-> do_FFT ();
 	inp		= 0;
 	delete	BandPass;
@@ -90,15 +91,16 @@ bandpassFIR	*BandPass	= new bandpassFIR ((int16_t)filterDegree,
 }
 
 void	fftFilter::setLowPass (int32_t low, int32_t rate) {
-int32_t	i;
 lowpassFIR	*LowPass	= new lowpassFIR ((int16_t)filterDegree,
 	                                          low,
 	                                          rate);
 
-	for (i = 0; i < filterDegree; i ++)
+	for (int i = 0; i < filterDegree; i ++)
 	   filterVector [i] = (LowPass -> getKernel ()) [i];
-	memset (&filterVector [filterDegree], 0,
-	                (fftSize - filterDegree) * sizeof (std::complex<float>));
+	for (int i = filterDegree; i < fftSize; i ++)
+	   filterVector [i] = std::complex<float> (0, 0);
+//	memset (&filterVector [filterDegree], 0,
+//	            (fftSize - filterDegree) * sizeof (std::complex<float>));
 	FilterFFT	-> do_FFT ();
 	inp	= 0;
 	delete LowPass;
@@ -113,8 +115,10 @@ int16_t		j;
 
 	if (++inp >= NumofSamples) {
 	   inp = 0;
-	   memset (&FFT_A [NumofSamples], 0,
-	               (fftSize - NumofSamples) * sizeof (std::complex<float>));
+	   for (int i = NumofSamples; i < fftSize; i ++)
+	      FFT_A [i] = std::complex<float> (0, 0);
+//	   memset (&FFT_A [NumofSamples], 0,
+//	               (fftSize - NumofSamples) * sizeof (std::complex<float>));
 	   MyFFT	-> do_FFT ();
 
 	   for (j = 0; j < fftSize; j ++) 

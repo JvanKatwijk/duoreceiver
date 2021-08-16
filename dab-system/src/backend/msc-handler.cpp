@@ -35,11 +35,10 @@ static int cifTable [] = {18, 72, 0, 36};
 
 //	Note CIF counts from 0 .. 3
 //
-		mscHandler::mscHandler	(duoReceiver *mr,
-	                                 uint8_t	dabMode) :
-	                                       params (dabMode),
+		mscHandler::mscHandler	(duoReceiver *mr) :
+	                                       params (DAB_MODE_1),
 	                                       my_fftHandler (params.get_T_u ()),
-	                                       myMapper (dabMode),
+	                                       myMapper (DAB_MODE_1),
 	                                       bufferSpace (params. get_L()) {
 	myRadioInterface	= mr;
 	cifVector. resize (55296);
@@ -50,7 +49,7 @@ static int cifTable [] = {18, 72, 0, 36};
 	fft_buffer		= my_fftHandler. getVector();
 	phaseReference	.resize (params. get_T_u());
 
-	numberofblocksperCIF = cifTable [(dabMode - 1) & 03];
+	numberofblocksperCIF = cifTable [(DAB_MODE_1 - 1) & 03];
 //	work_to_be_done. store (false);
 	command. resize (nrBlocks);
 	for (int i = 0; i < nrBlocks; i ++)
@@ -191,7 +190,6 @@ void	mscHandler::reset_Buffers	() {
 
 void	mscHandler::reset_Channel () {
 //	work_to_be_done. store (false);
-	fprintf (stderr, "channel reset: all services will be stopped\n");
 	locker. lock ();
 	for (auto const &b : theBackends) {
 	   b -> stopRunning();
@@ -203,11 +201,9 @@ void	mscHandler::reset_Channel () {
 
 void	mscHandler::stopService	(descriptorType *d) {
 	locker. lock ();
-	for (int i = 0; i < theBackends. size (); i ++) {
+	for (int i = 0; i < (int)(theBackends. size ()); i ++) {
 	   Backend *b = theBackends. at (i);
 	   if (b -> subChId == d -> subchId) {
-	      fprintf (stderr, "stopping (sub)service at subchannel %d\n",
-	                                    d -> subchId);
 	      b -> stopRunning ();
 	      delete b;
 	      theBackends. erase (theBackends. begin () + i);

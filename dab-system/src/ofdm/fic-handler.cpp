@@ -43,10 +43,9 @@
   *	The data is sent through to the fib processor
   */
 
-		ficHandler::ficHandler (duoReceiver *mr,
-	                                uint8_t dabMode):
+		ficHandler::ficHandler (duoReceiver *mr):
 	                                    fibDecoder (mr),
-	                                    params (dabMode),
+	                                    params (DAB_MODE_1),
 	                                    myViterbi (768, true) {
 int16_t	i, j, k;
 int	local	= 0;

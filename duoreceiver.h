@@ -100,12 +100,10 @@ private:
 	deviceHandler		*theDevice;
 	int16_t			*outTable;
 	QTimer			displayTimer;
-	QTimer			signalTimer;
 	QTimer			presetTimer;
-	QTimer			startTimer;
 	int			audioRate;
 	bool			muting;
-	uint8_t		decoder;
+	uint8_t			decoder;
 
 	int			serviceOrder;
 	bool			stereoSetting;
@@ -123,7 +121,6 @@ private:
 	int16_t		ficBlocks;
 	int16_t		ficSuccess;
 	int		total_ficError;
-	int		total_fics;
 	void		cleanScreen		();
 	void		start_audioService	(const QString &);
 	void		startChannel		(const QString &);

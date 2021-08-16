@@ -31,21 +31,18 @@
   *	The class inherits from the phaseTable.
   */
 
-	phaseReference::phaseReference (duoReceiver *mr,
-	                                processParams	*p):
-	                                     phaseTable (p -> dabMode),
-	                                     params (p -> dabMode),
+	phaseReference::phaseReference (duoReceiver *mr):
+	                                     phaseTable (DAB_MODE_1),
+	                                     params (DAB_MODE_1),
 	                                     my_fftHandler (params. get_T_u ()) {
 int32_t	i;
 float	Phi_k;
 
-	this	-> diff_length	= p -> diff_length;
 	this	-> diff_length	= 128;
-	this	-> depth	= p -> echo_depth;
+	this	-> depth	= 3;
 	this	-> T_u		= params. get_T_u();
 	this	-> T_g		= params. get_T_g();
 	this	-> carriers	= params. get_carriers();
-	fprintf (stderr, "phasereference carriers %d\n", carriers);
 	
 	refTable.		resize (T_u);
 	phaseDifferences.       resize (diff_length);

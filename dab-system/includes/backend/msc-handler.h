@@ -44,7 +44,7 @@ class	Backend;
 
 class mscHandler: public QThread  {
 public:
-			mscHandler		(duoReceiver *, uint8_t);
+			mscHandler		(duoReceiver *);
 			~mscHandler		();
 	void		processBlock_0		(std::complex<float> *);
 	void		process_Msc		(std::complex<float> *, int);

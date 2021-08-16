@@ -74,6 +74,7 @@ QSize   temp = QComboBox::sizeHint ();
 }
 
 void	presetComboBox::mouseDoubleClickEvent (QMouseEvent *e) {
+	(void)e;
 	fprintf (stderr, "double mouse click\n");
 }
 
