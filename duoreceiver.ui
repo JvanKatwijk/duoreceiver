@@ -7,7 +7,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>563</width>
+    <width>471</width>
     <height>300</height>
    </rect>
   </property>
@@ -172,7 +172,7 @@
            <item>
             <layout class="QVBoxLayout" name="verticalLayout_2">
              <item>
-              <widget class="smallQListView" name="ensembleDisplay"/>
+              <widget class="QListView" name="ensembleDisplay"/>
              </item>
             </layout>
            </item>
@@ -375,6 +375,13 @@
           </layout>
          </item>
          <item>
+          <widget class="QPushButton" name="freqSave">
+           <property name="text">
+            <string>save frequency</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QLCDNumber" name="lcd_Frequency">
            <property name="digitCount">
             <number>6</number>
@@ -406,11 +413,6 @@
    <class>verySmallPushButton</class>
    <extends>QPushButton</extends>
    <header location="global">verysmallpushbutton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>smallQListView</class>
-   <extends>QListView</extends>
-   <header>smallqlistview.h</header>
   </customwidget>
   <customwidget>
    <class>smallComboBox</class>

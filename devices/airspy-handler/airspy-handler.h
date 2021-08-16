@@ -20,7 +20,7 @@
 #include	<QObject>
 #include	<QSettings>
 #include	<QFrame>
-#include	"fm-constants.h"
+#include	"common.h"
 #include	"ringbuffer.h"
 #include	"device-handler.h"
 #include	"ui_airspy-widget.h"
@@ -73,26 +73,21 @@ typedef int (*pfn_airspy_set_linearity_gain) (struct airspy_device* device, uint
 typedef int (*pfn_airspy_set_sensitivity_gain)(struct airspy_device* device, uint8_t value);
 }
 
-class airspyHandler: public deviceHandler, public Ui_airspyWidget {
+class airspyHandler: public deviceHandler,
+	                   public Ui_airspyWidget {
 Q_OBJECT
 public:
-			airspyHandler	(QSettings *);
-			~airspyHandler	(void);
+			airspyHandler	(QSettings *,
+	                                 QWidget *Parent = nullptr);
+			~airspyHandler	();
+	bool		restartReader	(int32_t);
+	void		stopReader	();
 	void		setVFOFrequency (int32_t nf);
-	int32_t		getVFOFrequency (void);
-	uint8_t		myIdentity	(void);
-	bool		legalFrequency	(int32_t f);
-	int32_t		defaultFrequency (void);
-	bool		restartReader	(void);
-	void		stopReader	(void);
-	int32_t		getSamples	(DSPCOMPLEX *v, int32_t size);
-	int32_t		Samples		(void);
-	void		resetBuffer	(void);
-	int16_t		bitDepth	(void);
+	int32_t		getVFOFrequency ();
+	int32_t		getSamples	(std::complex<float> *v, int32_t size);
+	int32_t		Samples		();
+	void		resetBuffer	();
 //
-	bool		status		(void);
-	int		setExternalRate (int nsr);
-	int32_t		getRate		(void);
 	int16_t		currentTab;
 
 private slots:
@@ -106,7 +101,10 @@ private slots:
 	void		set_rf_bias	(void);
 	void		show_tab	(int);
 private:
+	QFrame		myFrame;
+	RingBuffer<std::complex<float>> theBuffer;
 	bool		load_airspyFunctions	(void);
+	int32_t		lastFrequency;
 //	The functions to be extracted from the dll/.so file
 	pfn_airspy_init		   my_airspy_init;
 	pfn_airspy_exit		   my_airspy_exit;
@@ -134,7 +132,6 @@ private:
 //
 	HINSTANCE	Handle;
 	bool		libraryLoaded;
-	QFrame		*myFrame;
 	bool		success;
 	bool		running;
 	bool		deviceOK;
@@ -147,13 +144,12 @@ const	char*		board_id_name (void);
 	int16_t		mixerGain;
 	int16_t		lnaGain;
 	
-	DSPCOMPLEX	*convBuffer;
+	std::complex<float>	*convBuffer;
 	int16_t		convIndex;
 	int16_t		convBufferSize;
-	int16_t		mapTable_int   [1920];
-	float		mapTable_float   [1920];
+	int16_t		mapTable_int	[2048];
+	float		mapTable_float	[2048];
 	QSettings	*airspySettings;
-	RingBuffer<DSPCOMPLEX> *theBuffer;
 	uint32_t	inputRate;
 	struct airspy_device* device;
 	uint64_t 	serialNumber;

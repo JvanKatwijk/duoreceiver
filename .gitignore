@@ -1,5 +1,5 @@
 .qmake.stash
-./linux-bin
+./linux-bin/duoreceiver
 ./build
 ./Makefile
 

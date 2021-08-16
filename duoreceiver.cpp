@@ -37,11 +37,11 @@
 #endif
 #include	"audiosink.h"
 
-//#include	"fmDriver.h"
 #include	"dab-processor.h"
 dabService      nextService;
 dabService      currentService;
 //
+#include	"program-list.h"
 
 #ifdef __MINGW32__
 #include	<iostream>
@@ -55,6 +55,8 @@ dabService      currentService;
 #define	FM_HIGH		110000
 
 	duoReceiver::duoReceiver (QSettings	*Si,
+	                          const QString &fmStationList,
+	                          const QString &presetFile,
 	                          QWidget	*parent):
 	                                    QDialog (parent) ,
 	                                    fm_audioBuffer (32768),
@@ -101,6 +103,10 @@ QString	presetName;
 
 	connect (streamOutSelector, SIGNAL (activated (int)),
                  this,  SLOT (set_streamSelector (int)));
+
+	my_presetHandler. loadPresets (presetFile, presetSelector);
+
+	myList		= new programList (this, fmStationList);
 	muting		= false;
 	connect (muteButton, SIGNAL (clicked ()),
 	         this, SLOT (handle_muteButton ()));
@@ -163,12 +169,14 @@ QString	presetName;
 	duoSettings	-> beginGroup ("FM_SYSTEM");
 	fmLow	= duoSettings -> value ("fmLow", FM_LOW). toInt ();
 	fmHigh	= duoSettings -> value ("fmLow", FM_HIGH). toInt ();
+	duoSettings	-> endGroup ();
 	set_dabSystem ();
 }
 
 	duoReceiver::~duoReceiver () {
 	delete	theDevice;
 	delete	soundOut;
+	delete	myList;
 }
 
 void	duoReceiver::updateTimeDisplay () {
@@ -260,6 +268,7 @@ void	duoReceiver::stop_dabSystem	() {
 	if (currentService. valid) 
 	   duoSettings -> setValue ("presetName", currentService. serviceName);
 	duoSettings	-> endGroup ();
+	my_presetHandler. savePresets (presetSelector);
 }
 
 void	duoReceiver::set_fmSystem	() {
@@ -271,6 +280,11 @@ void	duoReceiver::set_fmSystem	() {
                  this, SLOT (handle_freqButton ()));
         connect (squelchSlider, SIGNAL (valueChanged (int)),
                  this, SLOT (handle_squelchSlider (int)));
+        myList  -> show ();
+        myLine  = nullptr;
+        connect (freqSave, SIGNAL (clicked (void)),
+                 this, SLOT (set_freqSave (void)));
+
 	setfmDeemphasis         (fmDeemphasisSelector   -> currentText ());
 	audioGain               = 1.0;
 	duoSettings	-> beginGroup ("FM_SYSTEM");
@@ -291,11 +305,15 @@ void	duoReceiver::stop_fmSystem	() {
 	if (decoder != FM_DECODER)
 	   return;
 	theDevice	-> stopReader ();
+	myList		-> saveTable ();
 	duoSettings	-> beginGroup ("FM_SYSTEM");
 	duoSettings -> setValue ("fmFrequency", 
 	                         theDevice -> getVFOFrequency () / 1000);
 	duoSettings	-> endGroup ();
 	mykeyPad. hidePad ();
+	myList	-> hide ();
+        disconnect (freqSave, SIGNAL (clicked (void)),
+                 this, SLOT (set_freqSave (void)));
 	disconnect (freqButton, SIGNAL (clicked ()),
                     this, SLOT (handle_freqButton ()));
         disconnect (squelchSlider, SIGNAL (valueChanged (int)),
@@ -931,10 +949,12 @@ void    duoReceiver::handle_freqButton (void) {
 //
 //	This function os for FM only, so we check the frequency range
 void	duoReceiver::newFrequency	(int freq) {
+	fprintf (stderr, "request for freq %d *%d %d)\n", freq, fmLow, fmHigh);
 	if (freq < KHz (fmLow))
 	   return;
-	if (freq > MHz (fmHigh))
+	if (freq > KHz (fmHigh))
 	   return;
+	fprintf (stderr, "en nu echt\n");
 	theDevice	-> setVFOFrequency (freq);
 	lcd_Frequency	-> display (freq / 1000);
 }
@@ -983,6 +1003,7 @@ void	duoReceiver::clearRadioText () {
 }
 //
 void	duoReceiver::setRadioText (const QString &s) {
+	radioTextBox	-> setWordWrap (true);
 	radioTextBox	-> setText (s);
 }
 
@@ -1038,4 +1059,20 @@ int16_t	v	= s. toInt ();
 	      alpha	= 1.0 / (float (192000) / Tau + 1.0);
 	}
 }
-//
+
+
+void    duoReceiver::set_freqSave   (void) {
+        myLine  = new QLineEdit ();
+        myLine  -> show ();
+        connect (myLine, SIGNAL (returnPressed (void)),
+                 this, SLOT (handle_myLine (void)));
+}
+
+void	duoReceiver::handle_myLine (void) {
+int32_t freq    = theDevice -> getVFOFrequency ();
+QString programName     = myLine -> text ();
+        myList  -> addRow (programName, QString::number (freq / KHz (1)));
+        delete myLine;
+        myLine  = nullptr;
+}
+

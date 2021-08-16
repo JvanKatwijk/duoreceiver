@@ -46,13 +46,16 @@
 #include        "popup-keypad.h"
 #include        "fm-processor.h"
 #include        "squelchClass.h"
+#include	<QLineEdit>
 
 class	audioSink;
 class	deviceHandler;
 class	lowpassFIR;
 
-//class	fmDriver;
 class	dabProcessor;
+class	fmProcessor;
+class	programList;
+
 class dabService {
 public:
         QString         serviceName;
@@ -69,6 +72,8 @@ class duoReceiver: public QDialog,
 Q_OBJECT
 public:
 		duoReceiver		(QSettings	*,
+	                                 const QString &,
+	                                 const QString &,
 	                                 QWidget *parent = NULL);
 		~duoReceiver		();
 
@@ -173,6 +178,8 @@ private:
 	float           Tau;
         float           alpha;
         float           audioGain;
+	programList	*myList;
+	QLineEdit	*myLine;
 public slots:
         void            new_audioGain           (float);
 	void		fmAudio			(int);
@@ -185,6 +192,9 @@ public slots:
         void            setMusicSpeechFlag      (int);
         void            clearMusicSpeechFlag    (void);
         void            newFrequency            (int);
+
+	void		set_freqSave		();
+	void		handle_myLine		();
 private slots:
 	void            setfmDeemphasis (const QString& s);
         void            handle_freqButton       ();

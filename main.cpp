@@ -28,16 +28,28 @@
 #include	"duoreceiver.h"
 
 #define	DEFAULT_INI	".duoreceiver.ini"
+#define	FM_STATION_LIST	".duoreceiver-fm-stations.bin"
+#define	DAB_PRESETS	".duofreceiver-dab-presets.xml"
+
 int	main (int argc, char **argv) {
 QSettings	*ISettings;		/* .ini file	*/
 duoReceiver	*MyRadioInterface;
 QString iniFile = QDir::homePath ();
-QString	stationList	= QDir::homePath ();
+QString	fmStationList	= QDir::homePath ();
+QString dabPresets	= QDir::homePath ();
+
 	iniFile. append ("/");
 	iniFile. append (DEFAULT_INI);
 	iniFile	= QDir::toNativeSeparators (iniFile);
 
-	fprintf (stderr, "%s\n", iniFile. toLatin1 (). data ());
+	fmStationList. append ("/");
+        fmStationList. append (FM_STATION_LIST);
+        fmStationList = QDir::toNativeSeparators (fmStationList);
+
+        dabPresets. append ("/");
+        dabPresets. append (DAB_PRESETS);
+        dabPresets = QDir::toNativeSeparators (dabPresets);
+
 /*
  *	... and the settings of the "environment"
  */
@@ -50,7 +62,8 @@ QString	stationList	= QDir::homePath ();
 	QApplication a (argc, argv);
 	a. setWindowIcon (QIcon (":/FM-Radio.ico"));
 
-	MyRadioInterface = new duoReceiver (ISettings);
+	MyRadioInterface = new duoReceiver (ISettings,
+	                                    fmStationList, dabPresets);
 	MyRadioInterface -> show ();
 	a. exec ();
 /*

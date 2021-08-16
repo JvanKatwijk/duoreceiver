@@ -69,10 +69,6 @@ mir_sdr_GainValuesT gainDesc;
 sdrplaySelect	*sdrplaySelector;
 
 	sdrplaySettings		= s;
-	setupUi (widget);
-	widget		-> show ();
-	antennaSelector	-> hide ();
-	tunerSelector	-> hide ();
 	this	-> inputRate	= KHz (2048);
 	libraryLoaded	= false;
 
@@ -149,23 +145,10 @@ ULONG APIkeyValue_length = 255;
 	   throw (24);
         }
 
-	api_version	-> display (ver);
 	
 	vfoFrequency	= KHz (94700);
 
 	sdrplaySettings		-> beginGroup ("sdrplaySettings");
-	GRdBSelector            -> setValue (
-                    sdrplaySettings -> value ("sdrplay-ifgrdb", 20). toInt ());
-	lnaGainSetting          -> setValue (
-                    sdrplaySettings -> value ("sdrplay-lnastate", 3). toInt ());
-	agcMode         =
-                    sdrplaySettings -> value ("sdrplay-agcMode", 0). toInt ();
-        if (agcMode) {
-           agcControl -> setChecked (true);
-           GRdBSelector         -> hide ();
-           gainsliderLabel      -> hide ();
-        }
-	sdrplaySettings	-> endGroup ();
 
 	err	= my_mir_sdr_GetDevices (devDesc, &numofDevs, uint32_t (4));
 	if (err != mir_sdr_Success) {
@@ -207,7 +190,6 @@ ULONG APIkeyValue_length = 255;
 	else
 	   deviceIndex = 0;
 
-	serialNumber -> setText (devDesc [deviceIndex]. SerNo);
 	hwVersion = devDesc [deviceIndex]. hwVer;
         fprintf (stderr, "hwVer = %d\n", hwVersion);
 	err = my_mir_sdr_SetDeviceIdx (deviceIndex);
@@ -223,6 +205,24 @@ ULONG APIkeyValue_length = 255;
            throw (25);
         }
 //
+	setupUi (widget);
+	widget		-> show ();
+	serialNumber	-> setText (devDesc [deviceIndex]. SerNo);
+	api_version	-> display (ver);
+	antennaSelector	-> hide ();
+	tunerSelector	-> hide ();
+	GRdBSelector            -> setValue (
+                    sdrplaySettings -> value ("sdrplay-ifgrdb", 20). toInt ());
+	lnaGainSetting          -> setValue (
+                    sdrplaySettings -> value ("sdrplay-lnastate", 3). toInt ());
+	agcMode         =
+                    sdrplaySettings -> value ("sdrplay-agcMode", 0). toInt ();
+        if (agcMode) {
+           agcControl -> setChecked (true);
+           GRdBSelector         -> hide ();
+           gainsliderLabel      -> hide ();
+        }
+	sdrplaySettings	-> endGroup ();
 //	we restrict the frequencies from 60 - 400 Mhz, we
 //	can rely on a single table for the lna reductions
 	switch (hwVersion) {

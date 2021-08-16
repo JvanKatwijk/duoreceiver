@@ -26,7 +26,7 @@ CONFIG		+= dabSystem
 ########################
 #
 #
-#CONFIG	+= airspy
+CONFIG	+= airspy
 CONFIG	+= sdrplay
 #CONFIG	+= dabstick
 #
@@ -132,12 +132,13 @@ sdrplay {
 #	the AIRSPY
 #
 airspy {
-	DEFINES		+= HAVE_AIRSPY
+	DEFINES		+= __AIRSPY__
 	FORMS		+= ./devices/airspy-handler/airspy-widget.ui
 	DEPENDPATH	+= ./devices/airspy-handler
 	INCLUDEPATH	+= ./devices/airspy-handler \
-	                   /usr/local/include/libairspy
-	HEADERS		+= ./devices/airspy-handler/airspy-handler.h 
+	                   ./devices/airspy-handler/libairspy
+	HEADERS		+= ./devices/airspy-handler/airspy-handler.h \
+	                   ./devices/airspy-handler/libairspy/airspy.h
 	SOURCES		+= ./devices/airspy-handler/airspy-handler.cpp 
 }
 
@@ -155,7 +156,7 @@ fmSystem {
 	                    ./fm-system/rds 
 
 	HEADERS		+=  .\
-#	                    ./fm-system/fmDriver.h \
+	                    ./fm-system/program-list.h \
 	                    ./fm-system/squelchClass.h \
 	                    ./fm-system/popup-keypad.h \
 	                    ./fm-system/fm/fm-processor.h \
@@ -167,7 +168,7 @@ fmSystem {
 	                    ./fm-system/rds/rds-blocksynchronizer.h 
 
 	SOURCES		+=  \
-#	                    ./fm-system/fmDriver.cpp \
+	                    ./fm-system/program-list.cpp \
 	                    ./fm-system/popup-keypad.cpp \
 	                    ./fm-system/fm/fm-processor.cpp \
 	                    ./fm-system/fm/fm-decoder.cpp \
