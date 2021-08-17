@@ -35,6 +35,9 @@
 #ifdef	__AIRSPY__
 #include	"airspy-handler.h"
 #endif
+#ifdef	__RTLSDR__
+#include	"rtlsdr-handler.h"
+#endif
 #include	"audiosink.h"
 
 #include	"dab-processor.h"
@@ -79,6 +82,13 @@ QString	presetName;
 	setlocale (LC_ALL, "");
 //
 	theDevice		= nullptr;
+#ifdef	__RTLSDR__
+	if (theDevice == nullptr) 
+	   try {
+	      theDevice	= new rtlsdrHandler (Si, deviceControlWidget);
+	   } catch (int e) {}
+#endif
+
 #ifdef	__SDRPLAY_V2__
 	if (theDevice == nullptr) 
 	   try {

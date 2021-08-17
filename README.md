@@ -2,7 +2,7 @@ DUORECEIVER
 
 COMBINED FM AND DAB MINI RECEIVER
 
-(work in progress)
+---------------------------------------------------------------------------
 ---------------------------------------------------------------------------
 
 ![duoreceiver](/duoreceiver-1.png?raw=true)
@@ -16,11 +16,25 @@ program a "mini" version of a DAB/FM receiver is implemented.
 
 The current version supports 
  - the SDRplay devices using the "old" 2.13 interface library
- - the airspy devices. 
+ - the airspy devices
+ - rtlsdr sticks
+
+Selecting a device is automatic, if one of the configured devices
+is connected, the software will detect it and use it as input device.
+
+Note that the SDRplay control widget is included in the main widget,
+it merely contains a radio button for switching the agc on or off, and
+a spinbox for the IF gain reduction, restricted to the values 20 .. 59.
 
 Note that the airspy control widget is complicated and displayed
-in a separate widget, while the SDRplay control widget is made part
-of the main widget.
+in a separate widget.
+
+The "control" for the rtlsdr sticks is also included in the
+main widget. It is kept simple, just a radio button 
+for the agc and a gain setting, using the gains extracted from the
+device library
+
+![duoreceiver](/duoreceiver-4.png?raw=true)
 
 ------------------------------------------------------------------------
 Support for presets
@@ -46,12 +60,10 @@ service with that name.
 Adding a service to the list is by touching with the right mouse button
 the currently selected service.
 
--------------------------------------------------------------------------
-Support for other devices
--------------------------------------------------------------------------
+----------------------------------------------------------------------------
+ToDo
+----------------------------------------------------------------------------
 
-Next step will be to add the DABstick to the list of supported devices
-
-
-
+- generating a windows version
+- generating an appImage
 

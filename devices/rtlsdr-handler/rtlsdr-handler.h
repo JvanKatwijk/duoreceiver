@@ -1,40 +1,33 @@
-#
 /*
  *    Copyright (C) 2010, 2011, 2012, 2013
  *    Jan van Katwijk (J.vanKatwijk@gmail.com)
- *    Lazy Chair Programming
+ *    Lazy Chair Computing
  *
- *    This file is part of the SDR-J.
- *    Many of the ideas as implemented in SDR-J are derived from
- *    other work, made available through the GNU general Public License. 
- *    All copyrights of the original authors are recognized.
- *
- *    SDR-J is free software; you can redistribute it and/or modify
+ *    This file is part of the duoreceiver
+ *    duoreceiver is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
  *    the Free Software Foundation; either version 2 of the License, or
  *    (at your option) any later version.
  *
- *    SDR-J is distributed in the hope that it will be useful,
+ *    duoreceiver is distributed in the hope that it will be useful,
  *    but WITHOUT ANY WARRANTY; without even the implied warranty of
  *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with SDR-J; if not, write to the Free Software
+ *    along with duoreceiver; if not, write to the Free Software
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
  */
 
-#ifndef __DABSTICK__
-#define	__DABSTICK__
+#ifndef __RTLSDR_HANDLER__
+#define	__RTLSDR_HANDLER__
 
 #include	<QObject>
 #include	<QSettings>
 #include	<QFrame>
-#include	"fm-constants.h"
+#include	"common.h"
 #include	"ringbuffer.h"
 #include	"device-handler.h"
-#include	"dongleselect.h"
 #include	"ui_dabstick-widget.h"
 
 class	dll_driver;
@@ -65,52 +58,40 @@ typedef int (*  pfnrtlsdr_set_direct_sampling) (rtlsdr_dev_t *, int);
 typedef uint32_t (*  pfnrtlsdr_get_device_count) (void);
 typedef	int (* pfnrtlsdr_set_freq_correction)(rtlsdr_dev_t *, int);
 typedef	char *(* pfnrtlsdr_get_device_name)(int);
+
 //	This class is a simple wrapper around the
 //	rtlsdr library that is read is as dll
 //	It does not do any processing itself.
+
 class	rtlsdrHandler: public deviceHandler, public Ui_dabstickWidget {
 Q_OBJECT
 public:
-			rtlsdrHandler	(QSettings *);
-			~rtlsdrHandler	(void);
-	uint8_t		myIdentity	(void);
-	int32_t		getRate		(void);
+			rtlsdrHandler	(QSettings *, QWidget *);
+			~rtlsdrHandler	();
 	void		setVFOFrequency	(int32_t);
-	int32_t		getVFOFrequency	(void);
-	int32_t		setExternalRate	(int32_t);
-	int32_t		defaultFrequency	(void);
-	bool		legalFrequency	(int32_t);
-//	interface to the reader
-	bool		restartReader	(void);
-	void		stopReader	(void);
-	int32_t		getSamples	(DSPCOMPLEX *, int32_t);
-	int32_t		Samples		(void);
-	void		resetBuffer	(void);
-	int16_t		bitDepth	(void);
+	int32_t		getVFOFrequency	();
+	bool		restartReader	(int32_t);
+	void		stopReader	();
+	int32_t		getSamples	(std::complex<float> *, int32_t);
+	int32_t		Samples		();
+	void		resetBuffer	();
 //
 //	These need to be visible for the separate usb handling thread
-	RingBuffer<uint8_t>	*_I_Buffer;
+	RingBuffer<std::complex<uint8_t>>	_I_Buffer;
 	pfnrtlsdr_read_async	rtlsdr_read_async;
 	struct rtlsdr_dev	*device;
-	int32_t		sampleCounter;
 private:
-	QSettings	*dabSettings;
-	dongleSelect	*dongleSelector;
+	QSettings	*rtlsdrSettings;
 	int32_t		inputRate;
-	QFrame		*myFrame;
 	int32_t		deviceCount;
 	HINSTANCE	Handle;
 	dll_driver	*workerHandle;
 	int32_t		lastFrequency;
-	bool		libraryLoaded;
-	bool		open;
-	int		*gains;
 	int16_t		gainsCount;
 //	here we need to load functions from the dll
 	bool		load_rtlFunctions	(void);
 	pfnrtlsdr_open	rtlsdr_open;
 	pfnrtlsdr_close	rtlsdr_close;
-
 	pfnrtlsdr_set_center_freq rtlsdr_set_center_freq;
 	pfnrtlsdr_get_center_freq rtlsdr_get_center_freq;
 	pfnrtlsdr_get_tuner_gains rtlsdr_get_tuner_gains;
@@ -127,10 +108,8 @@ private:
 	pfnrtlsdr_set_freq_correction rtlsdr_set_freq_correction;
 	pfnrtlsdr_get_device_name rtlsdr_get_device_name;
 private slots:
-	void		setExternalGain	(int);
-	void		freqCorrection	(int);
-	void		setKhzOffset	(int);
-	void		setHzOffset	(int);
+	void		set_ExternalGain	(const QString &);
+	void		set_autogain	(int);
 };
 #endif
 

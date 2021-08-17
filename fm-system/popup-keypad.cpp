@@ -102,7 +102,6 @@
 	delete	KHzButton;
 	delete	clearButton;
 	delete	theDisplay;
-	delete	theDisplay;
 	delete	thePad;
 	delete	theFrame;
 }

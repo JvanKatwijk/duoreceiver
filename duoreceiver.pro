@@ -26,9 +26,9 @@ CONFIG		+= dabSystem
 ########################
 #
 #
+CONFIG	+= rtlsdr
 CONFIG	+= airspy
 CONFIG	+= sdrplay
-#CONFIG	+= dabstick
 #
 DEPENDPATH += . \
 	      ./src/output \
@@ -105,16 +105,14 @@ LIBS		+= -lsamplerate
 
 #	the devices:
 #	for the "standard" rtlsdr library use:
-dabstick {
-	DEFINES		+= HAVE_DABSTICK
+rtlsdr {
+	DEFINES		+= __RTLSDR__
 	FORMS		+= ./devices/rtlsdr-handler/dabstick-widget.ui
 	INCLUDEPATH	+= ./devices/rtlsdr-handler
 	DEPENDPATH	+= ./devices/rtlsdr-handler
-	HEADERS		+= ./devices/rtlsdr-handler/rtlsdr-handler.h \
-	                   ./devices/rtlsdr-handler/dongleselect.h
-	SOURCES		+= ./devices/rtlsdr-handler/rtlsdr-handler.cpp \
-	                   ./devices/rtlsdr-handler/dongleselect.cpp
-#	LIBS		+= -lrtlsdr
+	HEADERS		+= ./devices/rtlsdr-handler/rtlsdr-handler.h
+	SOURCES		+= ./devices/rtlsdr-handler/rtlsdr-handler.cpp 
+	LIBS		+= -lrtlsdr
 }
 #
 #	the SDRplay
