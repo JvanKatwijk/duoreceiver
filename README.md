@@ -9,9 +9,9 @@ COMBINED FM AND DAB MINI RECEIVER
 ![duoreceiver](/duoreceiver-2.png?raw=true)
 
 
-I got questions from family members why therewas not a combined
+I got questions from family members why there was no combined
 FM and DAB receiver.
-Duoreceiver is an answer to that, using the philosophy of the DAB mini
+*Duoreceiver* is an answer to that, using the philosophy of the DAB mini
 program a "mini" version of a DAB/FM receiver is implemented.
 
 The current version supports 
@@ -19,7 +19,10 @@ The current version supports
  - the airspy devices
  - rtlsdr sticks
 
-Selecting a device is automatic, if one of the configured devices
+Selecting a device is automatic on program startup.
+On program startup, the software will check the availability of
+any of the configured devices.
+If one of the configured devices
 is connected, the software will detect it and use it as input device.
 
 Note that the SDRplay control widget is included in the main widget,

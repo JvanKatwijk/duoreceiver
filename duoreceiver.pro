@@ -7,8 +7,8 @@
 TEMPLATE	= app
 QT		+= widgets  xml
 TARGET		= duoreceiver
-#CONFIG		-= console
-CONFIG		+= console
+CONFIG		-= console
+#CONFIG		+= console
 QMAKE_CFLAGS	+= -flto -ffast-math
 QMAKE_CXXFLAGS	+= -flto -ffast-math
 QMAKE_LFLAGS	+= -flto
