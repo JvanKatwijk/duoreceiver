@@ -32,7 +32,6 @@
 
 #include	<stdint.h>
 #include	<complex>
-#include	<dlfcn.h>
 #include	<QObject>
 #include	<QThread>
 #include	<QDialog>
@@ -46,7 +45,6 @@
 #define	PMSDR		0111
 #define	HACKRF		0114
 
-#define	HINSTANCE	void*
 //
 //	in some cases we anly want to differentiate between sticks
 //	and non-sticks

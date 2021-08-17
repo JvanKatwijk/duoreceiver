@@ -115,6 +115,7 @@ QString	presetName;
 
 	my_presetHandler. loadPresets (presetFile, presetSelector);
 
+	decoder		= 077;		// nothing
 	myList		= new programList (this, fmStationList);
 	muting		= false;
 	connect (muteButton, SIGNAL (clicked ()),
@@ -261,6 +262,7 @@ QString h;
         ficSuccess      = 0;
 	decoder		= DAB_DECODER;
 	functionDisplay -> setText ("DAB");
+	running. store (true);
 }
 
 void	duoReceiver::stop_dabSystem	() {
@@ -279,6 +281,8 @@ void	duoReceiver::stop_dabSystem	() {
         disconnect (channelSelector, SIGNAL (activated (const QString &)),
                     this, SLOT (selectChannel (const QString &)));
 	my_presetHandler. savePresets (presetSelector);
+	decoder		= 077;
+	running. store (false);
 }
 
 void	duoReceiver::set_fmSystem	() {
@@ -290,10 +294,10 @@ void	duoReceiver::set_fmSystem	() {
                  this, SLOT (handle_freqButton ()));
         connect (squelchSlider, SIGNAL (valueChanged (int)),
                  this, SLOT (handle_squelchSlider (int)));
-        myList  -> show ();
-        myLine  = nullptr;
         connect (freqSave, SIGNAL (clicked (void)),
                  this, SLOT (set_freqSave (void)));
+        myList  -> show ();
+        myLine  = nullptr;
 
 	setfmDeemphasis         (fmDeemphasisSelector   -> currentText ());
 	audioGain               = 1.0;
@@ -329,6 +333,7 @@ void	duoReceiver::stop_fmSystem	() {
         disconnect (squelchSlider, SIGNAL (valueChanged (int)),
                     this, SLOT (handle_squelchSlider (int)));
 	my_fmProcessor	-> stop ();
+	decoder		= 077;
 }
 
 #include <QCloseEvent>
@@ -371,9 +376,6 @@ void	duoReceiver::dabAudio     (int amount, int rate) {
 //	a slot, called by the fic/fib handlers
 void	duoReceiver::addtoEnsemble (const QString &serviceName,
 	                                             int32_t SId) {
-	if (!running. load ())
-	   return;
-
 	serviceId ed;
 	ed. name = serviceName;
 	ed. SId	= SId;
@@ -781,6 +783,7 @@ void	duoReceiver::setPresetStation () {
 void	duoReceiver::startChannel (const QString &channel) {
 int	tunedFrequency	=
 	         theBand. Frequency (channel);
+	theDevice		-> stopReader ();
 	theDevice		-> restartReader (tunedFrequency);
 	my_dabProcessor		-> start (tunedFrequency);
 	show_for_safety	();

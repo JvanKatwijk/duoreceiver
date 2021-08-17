@@ -82,8 +82,8 @@ private:
 //	and for the aac decoder
 	faadDecoder	*aacDecoder;
 signals:
-	void		isStereo			(bool);
-	void		newFrame			(int);
+	void		isStereo	(bool);
+	void		newFrame	(bool);
 };
 
 #endif

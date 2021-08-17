@@ -380,6 +380,7 @@ int	lnaState	= lnaGainSetting -> value ();
 	if (agcMode)	// should not happen, the slider is not visible
 	   return;
 
+	fprintf (stderr, "GRdB gezet op %d\n", GRdB);
 	err	=  my_mir_sdr_RSP_SetGr (GRdB, lnaState, 1, 0);
 	if (err != mir_sdr_Success) 
 	   fprintf (stderr, "Error at set_ifgain %s\n",

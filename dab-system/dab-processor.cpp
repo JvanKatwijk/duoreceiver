@@ -57,6 +57,7 @@
 	this	-> carriers		= params. get_carriers();
 	this	-> carrierDiff		= params. get_carrierDiff();
 
+	this	-> threshold		= 3;
 	ofdmBuffer. resize (2 * T_s);
 	fineOffset			= 0;	
 	coarseOffset			= 0;	
@@ -92,6 +93,8 @@ void	dabProcessor::stop	() {
 	while (isRunning ())
 	   wait ();
 	usleep (10000);
+	my_ficHandler. reset	();
+	my_mscHandler. reset_Channel ();
 }
 /***
    *	\brief run
@@ -148,8 +151,7 @@ notSynced:
   */
 	   startIndex = phaseSynchronizer. findIndex (ofdmBuffer, threshold);
 	   if (startIndex < 0) { // no sync, try again
-	      if (!correctionNeeded) {
-	      }
+//	      fprintf (stderr, "%d\n", startIndex);
 	      goto notSynced;
 	   }
 	   goto SyncOnPhase;
@@ -163,11 +165,9 @@ Check_endofNULL:
   *	cyclic prefix.
   */
 	   startIndex = phaseSynchronizer. findIndex (ofdmBuffer,
-	                                              1 * threshold);
+	                                              3 * threshold);
 	   if (startIndex < 0) { // no sync, try again
-	      if (!correctionNeeded) {
-	         fprintf (stderr, "%d\n", startIndex);
-	      }
+//	      fprintf (stderr, "%d\n", startIndex);
 	      goto notSynced;
 	   }
 
@@ -269,7 +269,7 @@ SyncOnPhase:
 	   goto Check_endofNULL;
 	}
 	catch (int e) {
-//	   fprintf (stderr, "dabProcessor is stopping\n");
+	   fprintf (stderr, "dabProcessor is stopping\n");
 	   ;
 	}
 }

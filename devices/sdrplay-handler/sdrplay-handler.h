@@ -34,6 +34,7 @@
 #include	<atomic>
 #include	<complex>
 #include	"ringbuffer.h"
+#include	"common.h"
 #include	"device-handler.h"
 #include	"ui_sdrplay-widget.h"
 #include	"mirsdrapi-rsp.h"

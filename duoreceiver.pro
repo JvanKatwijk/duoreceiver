@@ -7,18 +7,19 @@
 TEMPLATE	= app
 QT		+= widgets  xml
 TARGET		= duoreceiver
+#CONFIG		-= console
 CONFIG		+= console
-#QMAKE_CFLAGS	+= -flto -ffast-math
-#QMAKE_CXXFLAGS	+= -flto -ffast-math
-#QMAKE_LFLAGS	+= -flto
+QMAKE_CFLAGS	+= -flto -ffast-math
+QMAKE_CXXFLAGS	+= -flto -ffast-math
+QMAKE_LFLAGS	+= -flto
 #QMAKE_CFLAGS	+= -g
 #QMAKE_CXXFLAGS	+= -g
 #QMAKE_LFLAGS	+= -g
-QMAKE_CFLAGS   +=  -g -fsanitize=address
-QMAKE_CXXFLAGS +=  -g -fsanitize=address
-QMAKE_LFLAGS   +=  -g -fsanitize=address
+#QMAKE_CFLAGS   +=  -g -fsanitize=address
+#QMAKE_CXXFLAGS +=  -g -fsanitize=address
+#QMAKE_LFLAGS   +=  -g -fsanitize=address
 
-RC_ICONS        =  FM-Radio.ico
+RC_ICONS	=  duoreceiver.ico
 RESOURCES       += resources.qrc
 
 CONFIG		+= fmSystem
@@ -79,13 +80,13 @@ SOURCES += ./main.cpp \
 #
 # for windows32 we use:
 win32 {
-DESTDIR	= ../../windows-bin
+DESTDIR	= /usr/shared/w32-programs/windows-duoreceiver-32
 # includes in mingw differ from the includes in fedora linux
+INCLUDEPATH 	+= /usr/local/include
 INCLUDEPATH 	+= /usr/i686-w64-mingw32/sys-root/mingw/include
 INCLUDEPATH 	+= /usr/i686-w64-mingw32/sys-root/mingw/include/qt5/qwt
 LIBS	+= -lfftw3f
 LIBS	+= -lportaudio
-LIBS	+= -lqwt-qt5
 LIBS	+= -lsndfile
 LIBS	+= -lsamplerate
 LIBS	+= -lole32
@@ -112,7 +113,7 @@ rtlsdr {
 	DEPENDPATH	+= ./devices/rtlsdr-handler
 	HEADERS		+= ./devices/rtlsdr-handler/rtlsdr-handler.h
 	SOURCES		+= ./devices/rtlsdr-handler/rtlsdr-handler.cpp 
-	LIBS		+= -lrtlsdr
+#	LIBS		+= -lrtlsdr
 }
 #
 #	the SDRplay

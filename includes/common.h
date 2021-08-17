@@ -3,8 +3,12 @@
 #define	__COMMON__
 #include	<complex>
 
+#ifndef	__MINGW32__
 #include	"dlfcn.h"
 typedef	void	*HINSTANCE;
+#else
+#include	"windows.h"
+#endif
 static inline
 std::complex<float> cmul (std::complex<float> val, float mult) {
 	return std::complex<float> (real (val) * mult,

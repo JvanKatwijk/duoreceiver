@@ -48,9 +48,6 @@ float	Phi_k;
 	phaseDifferences.       resize (diff_length);
 	fft_buffer		= my_fftHandler. getVector();
 
-	framesperSecond		= 2048000 / params. get_T_F();
-	displayCounter		= 0;
-	
 	for (i = 0; i < T_u; i ++)
 	   refTable [i] = std::complex<float> (0, 0);
 

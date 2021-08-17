@@ -50,7 +50,6 @@ static int cifTable [] = {18, 72, 0, 36};
 	phaseReference	.resize (params. get_T_u());
 
 	numberofblocksperCIF = cifTable [(DAB_MODE_1 - 1) & 03];
-//	work_to_be_done. store (false);
 	command. resize (nrBlocks);
 	for (int i = 0; i < nrBlocks; i ++)
 	   command [i]. resize (params. get_T_u());
@@ -60,7 +59,6 @@ static int cifTable [] = {18, 72, 0, 36};
 }
 
 		mscHandler::~mscHandler() {
-//	work_to_be_done. store (false);
 	running. store (false);
 	while (isRunning())
 	   usleep (100);
@@ -189,7 +187,6 @@ void	mscHandler::reset_Buffers	() {
 }
 
 void	mscHandler::reset_Channel () {
-//	work_to_be_done. store (false);
 	locker. lock ();
 	for (auto const &b : theBackends) {
 	   b -> stopRunning();
@@ -209,8 +206,6 @@ void	mscHandler::stopService	(descriptorType *d) {
 	      theBackends. erase (theBackends. begin () + i);
 	   }
 	}
-//	if (theBackends. size () == 0)
-//	   work_to_be_done. store (false);
 	locker. unlock ();
 }
 
@@ -229,7 +224,6 @@ bool	mscHandler::set_Channel (descriptorType *d,
 	                                     d,
 	                                     audioBuffer,
 	                                     dataBuffer));
-	work_to_be_done. store (true);
 	locker. unlock();
 	return true;
 }
@@ -251,9 +245,6 @@ int16_t	currentblk;
 	                    fbits. data(), BitsperBlock * sizeof (int16_t));
 	if (currentblk < numberofblocksperCIF - 1) 
 	   return;
-
-//	if (!work_to_be_done. load())
-//	   return;
 
 //	OK, now we have a full CIF and it seems there is some work to
 //	be done.  We assume that the backend itself

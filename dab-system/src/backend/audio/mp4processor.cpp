@@ -77,6 +77,7 @@
   *	per Byte, nbits is the number of Bits (i.e. containing bytes)
   *	the function adds nbits bits, packed in bytes, to the frame
   */
+
 void	mp4Processor::addtoFrame (std::vector<uint8_t> V) {
 int16_t	i, j;
 uint8_t	temp	= 0;
