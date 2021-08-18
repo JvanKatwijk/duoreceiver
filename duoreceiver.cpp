@@ -71,7 +71,7 @@ dabService      currentService;
 	                                    audioSamples (32768),
 	                                    dab_audioBuffer (32768),
 	                                    audioHandler (&audioSamples),
-	                                    audioFilter (11, 15000 / 2, 48000) {
+	                                    audioFilter (11, 15000, 48000) {
 int16_t	latency		= 1;
 QString h;
 QString	presetName;
@@ -109,10 +109,13 @@ QString	presetName;
 
 	soundOut		= new audioSink		(latency);
 	((audioSink *)soundOut)	-> setupChannels (streamOutSelector);
-
+	
+	int k	= streamOutSelector -> findText ("default");
+	if (k != -1)
+	   streamOutSelector	-> setCurrentIndex (k);
 	connect (streamOutSelector, SIGNAL (activated (int)),
                  this,  SLOT (set_streamSelector (int)));
-
+	              
 	my_presetHandler. loadPresets (presetFile, presetSelector);
 
 	decoder		= 077;		// nothing
@@ -128,7 +131,8 @@ QString	presetName;
 	         SLOT (updateTimeDisplay ()));
 	displayTimer. start (1000);
 
-	switchTime	= 6000;
+	switchTime	= 
+	   duoSettings	-> value ("switchTime", 4000). toInt ();
 	connect (fmSelector, SIGNAL (clicked ()),
 	         this, SLOT (set_fmSystem ()));
 	connect (dabSelector, SIGNAL (clicked ()),
@@ -182,7 +186,11 @@ QString	presetName;
 	fmLow	= duoSettings -> value ("fmLow", FM_LOW). toInt ();
 	fmHigh	= duoSettings -> value ("fmLow", FM_HIGH). toInt ();
 	duoSettings	-> endGroup ();
-	set_dabSystem ();
+
+	if (duoSettings -> value ("system", "DAB"). toString () == "DAB")
+	   set_dabSystem ();
+	else
+	   set_fmSystem ();
 }
 
 	duoReceiver::~duoReceiver () {
@@ -310,6 +318,7 @@ void	duoReceiver::set_fmSystem	() {
 	theDevice	-> restartReader (KHz (frequency));
 	lcd_Frequency	-> display (frequency);
 	duoSettings	-> endGroup ();
+
 	my_fmProcessor	-> start ();
 	functionDisplay -> setText ("FM");
 	decoder = FM_DECODER;
@@ -353,11 +362,17 @@ void duoReceiver::closeEvent (QCloseEvent *event) {
 }
 
 void	duoReceiver::TerminateProcess	() {
-	if (decoder == DAB_DECODER)
+	if (decoder == DAB_DECODER) {
 	   stop_dabSystem ();
+	   duoSettings	-> setValue ("system", "DAB");
+	}
 	else
-	if (decoder == FM_DECODER)
+	if (decoder == FM_DECODER) {
 	   stop_fmSystem ();
+	   duoSettings -> setValue ("system", "FM");
+	}
+	duoSettings -> setValue ("audioStream",
+	                       streamOutSelector -> currentText ());
 }
 
 //
@@ -1032,7 +1047,7 @@ static float xkm1	= 0;
 static float ykm1	= 0;
 std::complex<float> buf1 [512];
 	(void)n;
-	
+
 	while (fm_audioBuffer. GetRingBufferReadAvailable () > 512) {
 	   fm_audioBuffer. getDataFromBuffer (buf1, 512);
 	   for (int i = 0; i < 512; i ++) {

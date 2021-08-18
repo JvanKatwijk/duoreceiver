@@ -94,6 +94,9 @@
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
         <widget class="verySmallPushButton" name="dabSelector">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;switch to DAB decoding&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <property name="text">
           <string>DAB</string>
          </property>
@@ -101,6 +104,9 @@
        </item>
        <item>
         <widget class="verySmallPushButton" name="fmSelector">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;switch to FM reception&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <property name="text">
           <string>FM </string>
          </property>
@@ -119,6 +125,9 @@
        </item>
        <item>
         <widget class="verySmallPushButton" name="muteButton">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Mute the output. Touching the button again will stop muting&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <property name="text">
           <string>mute</string>
          </property>
@@ -161,7 +170,7 @@
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QHBoxLayout" name="horizontalLayout_11">
@@ -212,6 +221,9 @@
              </item>
              <item>
               <widget class="smallComboBox" name="channelSelector">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;channel selector, choose any of the channels of BAND III&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
                <item>
                 <property name="text">
                  <string>channelSelector</string>
@@ -221,6 +233,9 @@
              </item>
              <item>
               <widget class="QComboBox" name="presetSelector">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Presets. Preferred services in any of the channels can be stored by clicking with the right mouse button on thr service when selected.&lt;/p&gt;&lt;p&gt;The channel and the servicename are stored.&lt;/p&gt;&lt;p&gt;Touching an element in the list in this combobox will select the service.&lt;/p&gt;&lt;p&gt;Of sources, preset elements are stored between program invocations.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
                <item>
                 <property name="text">
                  <string>presets</string>
@@ -232,6 +247,9 @@
               <layout class="QHBoxLayout" name="horizontalLayout_3">
                <item>
                 <widget class="verySmallPushButton" name="prevChannelButton">
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;switch to the previous channel&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
                  <property name="text">
                   <string>-</string>
                  </property>
@@ -239,6 +257,9 @@
                </item>
                <item>
                 <widget class="verySmallPushButton" name="nextChannelButton">
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;switch to the next channel&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
                  <property name="text">
                   <string>+</string>
                  </property>
@@ -250,6 +271,9 @@
               <layout class="QHBoxLayout" name="horizontalLayout_4">
                <item>
                 <widget class="verySmallPushButton" name="prevServiceButton">
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;switch to the previous service in the list and select that.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
                  <property name="text">
                   <string>-</string>
                  </property>
@@ -257,6 +281,9 @@
                </item>
                <item>
                 <widget class="verySmallPushButton" name="nextServiceButton">
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;switch to the next service in the service list and select that&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
                  <property name="text">
                   <string>+</string>
                  </property>
@@ -287,6 +314,9 @@
           <layout class="QHBoxLayout" name="horizontalLayout_6">
            <item>
             <widget class="QPushButton" name="freqButton">
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Touching thiss button will show a small panel on which a frequency can be specified&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
              <property name="text">
               <string>Freq</string>
              </property>
@@ -294,6 +324,9 @@
            </item>
            <item>
             <widget class="QComboBox" name="fmDeemphasisSelector">
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Deemphasis setting&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
              <item>
               <property name="text">
                <string>50</string>
@@ -317,6 +350,9 @@
           <layout class="QHBoxLayout" name="horizontalLayout_7">
            <item>
             <widget class="QPushButton" name="freqDecrementButton">
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;go 100 KHz down in frequency&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
              <property name="text">
               <string>-100</string>
              </property>
@@ -324,6 +360,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="freqIncrementButton">
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;go 100 KHz up in frequency&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
              <property name="text">
               <string>+100</string>
              </property>
@@ -376,6 +415,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="freqSave">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;touching this button will show a small window on which a name of the current frequency&lt;/p&gt;&lt;p&gt;can be set. The name and frequency are stored in a table&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
            <property name="text">
             <string>save frequency</string>
            </property>

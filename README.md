@@ -67,6 +67,21 @@ the currently selected service.
 ToDo
 ----------------------------------------------------------------------------
 
-- generating a windows version
 - generating an appImage
+
+----------------------------------------------------------------------------
+A note on some settings
+----------------------------------------------------------------------------
+
+A small "configuration file" is maintained for saving some settings.
+The file is names ".duoreceiver.ini" and maintained in the user's
+home directory.
+The ".ini" file will register the subsystem used, and on starting
+the program the registered subsystem , either F< or DAB, is activated.
+
+Two other files are maintained
+ - a file ".duoreceiver-fm-stations.bin", a file in a binary format containing the
+list of saved fm stations with their frequency;
+ - a file ".duoreceiver-dab-stations.xml", a file in ASCII format containing
+the presets, encoded in XML.
 
