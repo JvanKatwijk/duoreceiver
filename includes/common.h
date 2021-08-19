@@ -9,6 +9,8 @@ typedef	void	*HINSTANCE;
 #else
 #include	"windows.h"
 #endif
+
+#define	CURRENT_VERSION	"1.0"
 static inline
 std::complex<float> cmul (std::complex<float> val, float mult) {
 	return std::complex<float> (real (val) * mult,

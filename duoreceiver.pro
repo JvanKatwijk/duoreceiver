@@ -80,6 +80,17 @@ SOURCES += ./main.cpp \
 #
 # for windows32 we use:
 win32 {
+exists ("../.git") {
+   GITHASHSTRING = $$system(git rev-parse --short HEAD)
+   !isEmpty(GITHASHSTRING) {
+       message("Current git hash = $$GITHASHSTRING")
+       DEFINES += GITHASH=\\\"$$GITHASHSTRING\\\"
+   }
+}
+isEmpty(GITHASHSTRING) {
+    DEFINES += GITHASH=\\\"------\\\"
+}
+
 DESTDIR	= /usr/shared/w32-programs/windows-duoreceiver-32
 # includes in mingw differ from the includes in fedora linux
 INCLUDEPATH 	+= /usr/local/include
@@ -99,6 +110,17 @@ LIBS	+= -lwinpthread
 #for fedora and ubuntu  and the rpi we use
 unix { 
 DESTDIR		= ./linux-bin
+exists ("../.git") {
+   GITHASHSTRING = $$system(git rev-parse --short HEAD)
+   !isEmpty(GITHASHSTRING) {
+       message("Current git hash = $$GITHASHSTRING")
+       DEFINES += GITHASH=\\\"$$GITHASHSTRING\\\"
+   }
+}
+isEmpty(GITHASHSTRING) {
+    DEFINES += GITHASH=\\\"------\\\"
+}
+
 INCLUDEPATH 	+= /usr/include/qt4
 LIBS		+=  -lusb-1.0 -lrt -lportaudio -lsndfile -lfftw3f -ldl
 LIBS		+= -lsamplerate

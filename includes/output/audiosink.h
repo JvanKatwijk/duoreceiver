@@ -56,12 +56,10 @@ private:
 	int16_t		latency;
 	int32_t		size;
 	bool		portAudio;
-	bool		writerRunning;
 	int16_t		numofDevices;
 	int		paCallbackReturn;
 	int16_t		bufSize;
 	PaStream	*ostream;
-	SNDFILE		*dumpFile;
 	RingBuffer<float>	*_O_Buffer;
 	PaStreamParameters	outputParameters;
 

@@ -58,7 +58,6 @@
 using namespace std;
 //
 
-#define	CURRENT_VERSION	"4.0"
 
 #define		DAB		0100
 #define		DAB_PLUS	0101

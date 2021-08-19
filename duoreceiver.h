@@ -118,6 +118,7 @@ private:
 	std::vector<serviceId>
 	  	                insert   (std::vector<serviceId>,
 	                                  serviceId, int);
+	QString		footText		();
 	int16_t		ficBlocks;
 	int16_t		ficSuccess;
 	int		total_ficError;

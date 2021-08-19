@@ -74,6 +74,8 @@ dabService      currentService;
 	                                    audioFilter (11, 15000, 48000) {
 int16_t	latency		= 1;
 QString h;
+int	k;
+bool	err;
 QString	presetName;
 	duoSettings	= Si;
 	setupUi (this);
@@ -109,10 +111,18 @@ QString	presetName;
 
 	soundOut		= new audioSink		(latency);
 	((audioSink *)soundOut)	-> setupChannels (streamOutSelector);
+	h = duoSettings -> value ("audioStream",
+	                                       "default"). toString();
+
+        k       = streamOutSelector -> findText (h);
+        if (k != -1) {
+           streamOutSelector -> setCurrentIndex (k);
+           err = !((audioSink *)soundOut) -> selectDevice (k);
+        }
+
+        if ((k == -1) || err)
+           ((audioSink *)soundOut)      -> selectDefaultDevice();
 	
-	int k	= streamOutSelector -> findText ("default");
-	if (k != -1)
-	   streamOutSelector	-> setCurrentIndex (k);
 	connect (streamOutSelector, SIGNAL (activated (int)),
                  this,  SLOT (set_streamSelector (int)));
 	              
@@ -187,6 +197,8 @@ QString	presetName;
 	fmHigh	= duoSettings -> value ("fmLow", FM_HIGH). toInt ();
 	duoSettings	-> endGroup ();
 
+	copyrightLabel	-> setToolTip (footText ());
+
 	if (duoSettings -> value ("system", "DAB"). toString () == "DAB")
 	   set_dabSystem ();
 	else
@@ -197,6 +209,15 @@ QString	presetName;
 	delete	theDevice;
 	delete	soundOut;
 	delete	myList;
+}
+
+QString duoReceiver::footText () {
+        QString versionText = "duoReceiver version: " + QString(CURRENT_VERSION) + "\n";
+        versionText += "Built on " + QString(__TIMESTAMP__) + QString (", Commit ") + QString (GITHASH) + "\n";
+        versionText += "Copyright Jan van Katwijk, mailto:J.vanKatwijk@gmail.com\n";
+        versionText += "Rights of Qt, fftw, portaudio, libfaad gratefully acknowledged\n";
+        versionText += "Rights of other contributors gratefully acknowledged";
+       return versionText;
 }
 
 void	duoReceiver::updateTimeDisplay () {
@@ -240,6 +261,7 @@ QString h;
 	if (decoder == FM_DECODER)
 	   stop_fmSystem ();
 
+	soundOut	-> stop ();
 	stackedWidget	-> setCurrentIndex (0);
 	currentService. valid   = false;
 	duoSettings	-> beginGroup ("DAB_SYSTEM");
@@ -265,6 +287,7 @@ QString h;
 	}
         connect (channelSelector, SIGNAL (activated (const QString &)),
                  this, SLOT (selectChannel (const QString &)));
+	soundOut	-> restart ();
 	startChannel (channelSelector -> currentText ());
         ficBlocks       = 0;
         ficSuccess      = 0;
@@ -277,6 +300,7 @@ void	duoReceiver::stop_dabSystem	() {
 	if (decoder != DAB_DECODER)
 	   return;
 	theDevice	-> stopReader ();
+	soundOut	-> stop ();
 	my_dabProcessor	-> stop ();
 	presetTimer. stop ();
 	duoSettings	-> beginGroup ("DAB_SYSTEM");
@@ -297,6 +321,7 @@ void	duoReceiver::set_fmSystem	() {
 	if (decoder == DAB_DECODER)
 	   stop_dabSystem ();
 
+	soundOut	-> stop ();
 	stackedWidget	-> setCurrentIndex (1);
 	connect (freqButton, SIGNAL (clicked ()),
                  this, SLOT (handle_freqButton ()));
@@ -319,6 +344,7 @@ void	duoReceiver::set_fmSystem	() {
 	lcd_Frequency	-> display (frequency);
 	duoSettings	-> endGroup ();
 
+	soundOut	-> restart ();
 	my_fmProcessor	-> start ();
 	functionDisplay -> setText ("FM");
 	decoder = FM_DECODER;
@@ -328,6 +354,7 @@ void	duoReceiver::stop_fmSystem	() {
 	if (decoder != FM_DECODER)
 	   return;
 	theDevice	-> stopReader ();
+	soundOut	-> stop ();
 	myList		-> saveTable ();
 	duoSettings	-> beginGroup ("FM_SYSTEM");
 	duoSettings -> setValue ("fmFrequency", 

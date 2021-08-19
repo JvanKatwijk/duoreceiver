@@ -33,7 +33,6 @@ int32_t	i;
 	this	-> latency	= latency;
 	_O_Buffer		= new RingBuffer<float>(2 * 32768);
 	portAudio		= false;
-	writerRunning		= false;
 	if (Pa_Initialize () != paNoError) {
 	   fprintf (stderr, "Initializing Pa for output failed\n");
 	   return;
@@ -47,10 +46,9 @@ int32_t	i;
 
 	numofDevices	= Pa_GetDeviceCount ();
 	outTable	= new int16_t [numofDevices + 1];
-	for (i = 0; i < numofDevices; i ++)
+	for (i = 0; i <= numofDevices; i ++)
 	   outTable [i] = -1;
 	ostream		= nullptr;
-	selectDefaultDevice ();
 }
 
 	audioSink::~audioSink	(void) {
@@ -59,7 +57,6 @@ int32_t	i;
 	   (void) Pa_AbortStream (ostream);
 	   while (!Pa_IsStreamStopped (ostream))
 	      Pa_Sleep (1);
-	   writerRunning = false;
 	}
 
 	if (ostream != nullptr)
@@ -76,16 +73,15 @@ int32_t	i;
 //
 bool	audioSink::selectDevice (int16_t odev) {
 PaError err;
-	fprintf (stderr, "select device with %d\n", odev);
 	if (!isValidDevice (odev))
 	   return false;
 
+	fprintf (stderr, "select device with %d (%d)\n", odev, numofDevices);
 	if ((ostream != nullptr) && !Pa_IsStreamStopped (ostream)) {
 	   paCallbackReturn = paAbort;
 	   (void) Pa_AbortStream (ostream);
 	   while (!Pa_IsStreamStopped (ostream))
 	      Pa_Sleep (1);
-	   writerRunning = false;
 	}
 
 	if (ostream != nullptr)
@@ -118,7 +114,6 @@ PaError err;
 	   qDebug ("Open ostream error\n");
 	   return false;
 	}
-	fprintf (stderr, "stream opened\n");
 	paCallbackReturn = paContinue;
 	err = Pa_StartStream (ostream);
 	if (err != paNoError) {
@@ -126,7 +121,6 @@ PaError err;
 	   return false;
 	}
 	fprintf (stderr, "stream started\n");
-	writerRunning	= true;
 	return true;
 }
 
@@ -140,8 +134,6 @@ PaError err;
 	_O_Buffer	-> FlushRingBuffer ();
 	paCallbackReturn = paContinue;
 	err = Pa_StartStream (ostream);
-	if (err == paNoError)
-	   writerRunning	= true;
 	fprintf (stderr, "audio restarted\n");
 }
 
@@ -153,7 +145,6 @@ void	audioSink::stop	(void) {
 	(void)Pa_StopStream	(ostream);
 	while (!Pa_IsStreamStopped (ostream))
 	   Pa_Sleep (1);
-	writerRunning		= false;
 }
 //
 //	helper

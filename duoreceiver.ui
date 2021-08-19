@@ -7,7 +7,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>471</width>
+    <width>470</width>
     <height>300</height>
    </rect>
   </property>
@@ -82,12 +82,12 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>duoreceiver</string>
+   <string>duoreceiver-1.0</string>
   </property>
   <property name="windowIconText">
    <string>QUIT</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_12">
+  <layout class="QHBoxLayout" name="horizontalLayout_14">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_5">
      <item>
@@ -136,11 +136,35 @@
       </layout>
      </item>
      <item>
-      <widget class="QLabel" name="timeDisplay">
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
+      <layout class="QHBoxLayout" name="horizontalLayout_12">
+       <item>
+        <widget class="QLabel" name="timeDisplay">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="copyrightLabel">
+         <property name="font">
+          <font>
+           <pointsize>14</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Qt-DAB copyright:&lt;/p&gt;&lt;p&gt;J van Katwijk, Lazy Chair Computing. J.vanKatwijk@gmail.com&lt;/p&gt;&lt;p&gt;Copyright of the Qt toolkit used: the Qt Company&lt;/p&gt;&lt;p&gt;Copyright of the libraries used for SDRplay, rtl-sdr based sticks, AIRspy, portaudio, libsndfile and libsamplerate and libfftw3 to their developers&lt;/p&gt;&lt;p&gt;Copyright of the MP2 library used Martin J Fiedler&lt;/p&gt;&lt;p&gt;Copyright of the firecode checker: Gnu Radio&lt;/p&gt;&lt;p&gt;Copyright of the Reed Solomon Decoder software: Phil Karns&lt;/p&gt;&lt;p&gt;Copyright of the code to create a correct header for the AAC files: Stefan Poeschel&lt;/p&gt;&lt;p&gt;All copyrights gratefully acknowledged&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;The current layout of the GUI is based on a design of Luo Zhang, Thanks&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Qt-DAB (an SDR-J program) is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>©</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item>
       <widget class="QWidget" name="deviceControlWidget" native="true"/>
@@ -452,14 +476,14 @@
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <customwidgets>
   <customwidget>
-   <class>verySmallPushButton</class>
-   <extends>QPushButton</extends>
-   <header location="global">verysmallpushbutton.h</header>
-  </customwidget>
-  <customwidget>
    <class>smallComboBox</class>
    <extends>QComboBox</extends>
    <header>smallcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>verySmallPushButton</class>
+   <extends>QPushButton</extends>
+   <header>verysmallpushbutton.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
