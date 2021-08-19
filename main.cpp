@@ -58,7 +58,9 @@ QString dabPresets	= QDir::homePath ();
  *	Before we connect control to the gui, we have to
  *	instantiate
  */
+#if	Qt >= 0x050600
 	QGuiApplication::setAttribute (Qt::AA_EnableHighDpiScaling);
+#endif
 	QApplication a (argc, argv);
 	a. setWindowIcon (QIcon (":/FM-Radio.ico"));
 

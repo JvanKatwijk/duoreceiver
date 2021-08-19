@@ -55,9 +55,9 @@
 
 float	compAtan::atan2 (float y, float x) {
 
-	if (isinf (x) || isinf (y)) return 0;
-	if (isnan (x) || isnan (y)) return 0;
-	if (isnan (-x) || isnan (-y)) return 0;
+	if (std::isinf (x) || std::isinf (y)) return 0;
+	if (std::isnan (x) || std::isnan (y)) return 0;
+	if (std::isnan (-x) || std::isnan (-y)) return 0;
 	if (x == 0) {
 	   if (y == 0)  return 0;
 //	      return std::numeric_limits<float>::infinity ();

@@ -1,4 +1,4 @@
-DUORECEIVER
+DUORECEIVER 1.0
 
 COMBINED FM AND DAB MINI RECEIVER
 
@@ -9,25 +9,31 @@ COMBINED FM AND DAB MINI RECEIVER
 ![duoreceiver](/duoreceiver-2.png?raw=true)
 
 
-I got questions from family members why there was no combined
-FM and DAB receiver.
+I got questions from family members why no combined
+FM and DAB receiver was available, since there were
+multiple versions of both a DAB decoder and an FM decoder written.
 *Duoreceiver* is an answer to that, using the philosophy of the DAB mini
-program a "mini" version of a DAB/FM receiver is implemented.
+program iy is a "mini" version of a DAB/FM receiver.
 
 The current version supports 
  - the SDRplay devices using the "old" 2.13 interface library
  - the airspy devices
  - rtlsdr sticks
 
-Selecting a device is automatic on program startup.
-On program startup, the software will check the availability of
+Further devices may be added later on.
+
+*Selecting* a device is automatic,
+on program startup, the software will check the availability of
 any of the configured devices.
-If one of the configured devices
-is connected, the software will detect it and use it as input device.
+If any of the configured devices
+is connected and can be initialized, the duoreceiver program will
+detect it and use it as input device.
 
 Note that the SDRplay control widget is included in the main widget,
-it merely contains a radio button for switching the agc on or off, and
-a spinbox for the IF gain reduction, restricted to the values 20 .. 59.
+it merely contains a radio button for switching the agc on or off, 
+a spinbox for the IF gain reduction, restricted to the values 20 .. 59
+and a spinbox for setting an LNA state.
+If the agc is "on", the IF gain reduction spinbox is hidden.
 
 Note that the airspy control widget is complicated and displayed
 in a separate widget.
@@ -60,23 +66,22 @@ Touching the combobox will show the registered presets.
 Touching a name in the list will instruct the software to switch to the
 service with that name.
 
-Adding a service to the list is by touching with the right mouse button
+*Adding* a service to the list is by touching with the right mouse button
 the currently selected service.
 
-----------------------------------------------------------------------------
-ToDo
-----------------------------------------------------------------------------
-
-- generating an appImage
+On switching off one of the subsystems, the duoreceiver will remember
+the frequency for the FM subsystem, or the service for the DAB subsystem.
+Next time such a subsystem is selected, the  frequency (for FM)
+or the service (for DAB) will be selected automatically.
 
 ----------------------------------------------------------------------------
 A note on some settings
 ----------------------------------------------------------------------------
 
 A small "configuration file" is maintained for saving some settings.
-The file is names ".duoreceiver.ini" and maintained in the user's
+The file is named ".duoreceiver.ini" and maintained in the user's
 home directory.
-The ".ini" file will register the subsystem used, and on starting
+This ".ini" file will (a.o) register the subsystem used, and on starting
 the program the registered subsystem , either F< or DAB, is activated.
 
 Two other files are maintained
@@ -84,4 +89,20 @@ Two other files are maintained
 list of saved fm stations with their frequency;
  - a file ".duoreceiver-dab-stations.xml", a file in ASCII format containing
 the presets, encoded in XML.
+
+----------------------------------------------------------------------
+# Copyright
+------------------------------------------------------------------------
+
+        Copyright (C)  2021
+        Jan van Katwijk (J.vanKatwijk@gmail.com)
+        Lazy Chair Computing
+
+        The Qt-DAB  software and derivatives such as duoreceiver
+	is made available under the GPL-2.0.
+        The software, is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        GNU General Public License for more details.
+
 
