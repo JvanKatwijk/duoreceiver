@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=duoreceiver
+Exec=duoreceiver
+Icon=duoreceiver
+Type=Application
+Categories=AudioVideo;
+Comment=A DAB/FM decoder using Qt and C++
