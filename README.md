@@ -6,19 +6,18 @@ COMBINED FM AND DAB MINI RECEIVER
 ---------------------------------------------------------------------------
 
 ![duoreceiver](/duoreceiver-1.png?raw=true)
-![duoreceiver](/duoreceiver-2.png?raw=true)
 
 
-I got questions from family members why no combined
-FM and DAB receiver was available, since there were
+I got questions from family members why  there was no combined
+FM and DAB receiver available, since there were
 multiple versions of both a DAB decoder and an FM decoder written.
 *Duoreceiver* is an answer to that, using the philosophy of the DAB mini
-program iy is a "mini" version of a DAB/FM receiver.
+program it is a "mini" version of a DAB/FM receiver.
 
 The current version supports 
  - the SDRplay devices using the "old" 2.13 interface library
- - the airspy devices
  - rtlsdr sticks
+ - the airspy devices
 
 Further devices may be added later on.
 
@@ -29,31 +28,29 @@ If any of the configured devices
 is connected and can be initialized, the duoreceiver program will
 detect it and use it as input device.
 
-Note that the SDRplay control widget is included in the main widget,
+One sees that the SDRplay control widget is included in the main widget,
 it merely contains a radio button for switching the agc on or off, 
 a spinbox for the IF gain reduction, restricted to the values 20 .. 59
 and a spinbox for setting an LNA state.
 If the agc is "on", the IF gain reduction spinbox is hidden.
-
-Note that the airspy control widget is complicated and displayed
-in a separate widget.
 
 The "control" for the rtlsdr sticks is also included in the
 main widget. It is kept simple, just a radio button 
 for the agc and a gain setting, using the gains extracted from the
 device library
 
-![duoreceiver](/duoreceiver-4.png?raw=true)
+Note that the airspy control widget is complicated and displayed
+in a separate widget.
 
 ------------------------------------------------------------------------
 Support for presets
 ------------------------------------------------------------------------
 
-Both the FM and the DAB subsystems support *presets*.
+Both the FM and the DAB subsystems support *presets*, as did their origins.
 
 ![duoreceiver](/duoreceiver-3.png?raw=true)
 
-For the FM subsystem, the widget contains button labeled *save frequency*
+For the FM subsystem, the widget contains a button labeled *save frequency*
 that - when touched - will open a small widget in which a name may be
 given to the currently selected frequency.
 
@@ -82,13 +79,36 @@ A small "configuration file" is maintained for saving some settings.
 The file is named ".duoreceiver.ini" and maintained in the user's
 home directory.
 This ".ini" file will (a.o) register the subsystem used, and on starting
-the program the registered subsystem , either F< or DAB, is activated.
+the program the registered subsystem , either FM or DAB, is activated.
 
 Two other files are maintained
  - a file ".duoreceiver-fm-stations.bin", a file in a binary format containing the
 list of saved fm stations with their frequency;
  - a file ".duoreceiver-dab-stations.xml", a file in ASCII format containing
 the presets, encoded in XML.
+
+-------------------------------------------------------------------------
+duoreceiver on Windows
+-------------------------------------------------------------------------
+
+For use under Windows an installer is available in the releases section
+if this repository.
+
+------------------------------------------------------------------------
+duoreceiver on Linux-x64
+-----------------------------------------------------------------------
+
+For use under Linux-x64 an AppImage is available. Note that you should
+have the support library for your device of choice should be installed.
+
+-----------------------------------------------------------------------
+Building an executable
+-----------------------------------------------------------------------
+
+Building an executable is obviously also possible.
+For now, only the "qmake/make" route is there.
+Easiest is to llok into the documentation for qt-dab, section
+on dabMini, and follow the build instructions given there.
 
 ----------------------------------------------------------------------
 # Copyright

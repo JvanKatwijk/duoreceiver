@@ -80,7 +80,7 @@ SOURCES += ./main.cpp \
 #
 # for windows32 we use:
 win32 {
-exists ("../.git") {
+exists ("./.git") {
    GITHASHSTRING = $$system(git rev-parse --short HEAD)
    !isEmpty(GITHASHSTRING) {
        message("Current git hash = $$GITHASHSTRING")
@@ -110,7 +110,7 @@ LIBS	+= -lwinpthread
 #for fedora and ubuntu  and the rpi we use
 unix { 
 DESTDIR		= ./linux-bin
-exists ("../.git") {
+exists ("./.git") {
    GITHASHSTRING = $$system(git rev-parse --short HEAD)
    !isEmpty(GITHASHSTRING) {
        message("Current git hash = $$GITHASHSTRING")
