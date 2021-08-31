@@ -107,8 +107,17 @@ uint16_t	i;
 	             my_airspy_error_name((airspy_error)result), result);
 	   throw (24);
 	}
-	
-	result = my_airspy_open (&device);
+
+	uint64_t deviceList [4];
+        int     deviceIndex	= 0;
+        int numofDevs = my_airspy_list_devices (deviceList, 4);
+
+	if (numofDevs == 0) {
+	   fprintf (stderr, "No devices found\n");
+           throw (22);
+        }
+
+	result = my_airspy_open (&device, deviceList [deviceIndex]);
 	if (result != AIRSPY_SUCCESS) {
 	   printf ("my_airpsy_open () failed: %s (%d)\n",
 	             my_airspy_error_name ((airspy_error)result), result);
@@ -380,17 +389,17 @@ int result = my_airspy_board_partid_serialno_read (device,
 }
 //
 //	not used here
-int	airspyHandler::open (void) {
-int result = my_airspy_open (&device);
-
-	if (result != AIRSPY_SUCCESS) {
-	   printf ("airspy_open() failed: %s (%d)\n",
-	          my_airspy_error_name((airspy_error)result), result);
-	   return -1;
-	} else {
-	   return 0;
-	}
-}
+//int	airspyHandler::open (void) {
+//int result = my_airspy_open (&device);
+//
+//	if (result != AIRSPY_SUCCESS) {
+//	   printf ("airspy_open() failed: %s (%d)\n",
+//	          my_airspy_error_name((airspy_error)result), result);
+//	   return -1;
+//	} else {
+//	   return 0;
+//	}
+//}
 
 //
 //	These functions are added for the SDR-J interface
@@ -513,6 +522,13 @@ bool	airspyHandler::load_airspyFunctions (void) {
 	   fprintf (stderr, "Could not find airspy_exit\n");
 	   return false;
 	}
+
+	my_airspy_list_devices  = (pfn_airspy_list_devices)
+                               GETPROCADDRESS (Handle, "airspy_list_devices");
+	if (my_airspy_list_devices == nullptr) {
+	   fprintf (stderr, "Could not find airspy_list_devices\n");
+           return false;
+        }
 
 	my_airspy_open	= (pfn_airspy_open)
 	                       GETPROCADDRESS (Handle, "airspy_open");

@@ -38,6 +38,9 @@
 #ifdef	__RTLSDR__
 #include	"rtlsdr-handler.h"
 #endif
+#ifdef	__PLUTO__
+#include	"pluto-handler.h"
+#endif
 #include	"audiosink.h"
 
 #include	"dab-processor.h"
@@ -84,6 +87,12 @@ QString	presetName;
 	setlocale (LC_ALL, "");
 //
 	theDevice		= nullptr;
+#ifdef	__PLUTO__
+	if (theDevice == nullptr)
+	   try {
+	      theDevice = new plutoHandler (Si, deviceControlWidget);
+	   } catch (int e) {}
+#endif
 #ifdef	__RTLSDR__
 	if (theDevice == nullptr) 
 	   try {
@@ -150,6 +159,7 @@ QString	presetName;
 //
 //	allocate the DAB subsystem
         theBand. setupChannels (channelSelector);
+
         serviceList. clear ();
         model . clear ();
         ensembleDisplay         -> setModel (&model);
@@ -164,6 +174,7 @@ QString	presetName;
         my_dabProcessor = new dabProcessor (this, theDevice, &globals);
 
 	my_fmProcessor	= new fmProcessor (this, theDevice, &fm_audioBuffer);
+
 	qApp    -> installEventFilter (this);
 
         connect (presetSelector, SIGNAL (activated (const QString &)),
@@ -256,13 +267,17 @@ void	duoReceiver::set_dabSystem	() {
 int16_t k;
 QString h;
 
+	fprintf (stderr, "we gaan voor DAB\n");
 	if (decoder == DAB_DECODER)
 	   return;
 	if (decoder == FM_DECODER)
 	   stop_fmSystem ();
 
-	soundOut	-> stop ();
+	fprintf (stderr, "zetten de sound stop\n");
+//	soundOut	-> stop ();
+	fprintf (stderr, "zetten de index op 0\n");
 	stackedWidget	-> setCurrentIndex (0);
+	fprintf (stderr, "en dan?\n");
 	currentService. valid   = false;
 	duoSettings	-> beginGroup ("DAB_SYSTEM");
 	QString presetName           =

@@ -29,7 +29,9 @@
 extern "C"  {
 typedef	int (*pfn_airspy_init) (void);
 typedef int (*pfn_airspy_exit) (void);
-typedef int (*pfn_airspy_open) (struct airspy_device**);
+typedef int (*pfn_airspy_list_devices)(uint64_t *, int);
+//typedef int (*pfn_airspy_open) (struct airspy_device**);
+typedef int (*pfn_airspy_open) (struct airspy_device**, uint64_t);
 typedef int (*pfn_airspy_close) (struct airspy_device*);
 typedef int (*pfn_airspy_get_samplerates) (struct airspy_device* device,
 	                                   uint32_t* buffer,
@@ -108,6 +110,7 @@ private:
 //	The functions to be extracted from the dll/.so file
 	pfn_airspy_init		   my_airspy_init;
 	pfn_airspy_exit		   my_airspy_exit;
+	pfn_airspy_list_devices    my_airspy_list_devices;
 	pfn_airspy_open		   my_airspy_open;
 	pfn_airspy_close	   my_airspy_close;
 	pfn_airspy_get_samplerates my_airspy_get_samplerates;

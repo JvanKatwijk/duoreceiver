@@ -30,6 +30,7 @@ CONFIG		+= dabSystem
 CONFIG	+= rtlsdr
 CONFIG	+= airspy
 CONFIG	+= sdrplay
+CONFIG	+= pluto
 #
 DEPENDPATH += . \
 	      ./src/output \
@@ -162,6 +163,20 @@ airspy {
 	                   ./devices/airspy-handler/libairspy/airspy.h
 	SOURCES		+= ./devices/airspy-handler/airspy-handler.cpp 
 }
+
+pluto {
+        DEFINES         += __PLUTO__
+        FORMS           += ./devices/pluto-handler/pluto-widget.ui
+        DEPENDPATH      += ./devices/pluto-handler
+        INCLUDEPATH     += ./devices/pluto-handler 
+        HEADERS         += ./devices/pluto-handler/pluto-handler.h \
+                           ./devices/pluto-handler/dabFilter.h \
+	                   ./devices/pluto-handler/iio.h
+	QT		+= network
+        SOURCES         += ./devices/pluto-handler/pluto-handler.cpp
+}
+
+
 
 fmSystem {
 	DEFINES		+= __WITH_FM__
